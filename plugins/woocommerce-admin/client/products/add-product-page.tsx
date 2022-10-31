@@ -2,9 +2,11 @@
  * External dependencies
  */
 import { recordEvent } from '@woocommerce/tracks';
-import { useEffect } from '@wordpress/element';
-import { Form } from '@woocommerce/components';
+import { useEffect, useState } from '@wordpress/element';
+import { Form, FormContext } from '@woocommerce/components';
+import { TextControl } from '@wordpress/components';
 import { Product } from '@woocommerce/data';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * Internal dependencies
@@ -19,10 +21,41 @@ import { ImagesSection } from './sections/images-section';
 import './product-page.scss';
 import { validate } from './product-validation';
 import { AttributesSection } from './sections/attributes-section';
+import { WooProductFieldItem } from './layout/woo-product-field-item';
+import { ProductSectionLayout } from './layout/product-section-layout';
+
+type Field = {
+	id: string;
+	title: string;
+	section: string;
+	field: string;
+	args: {
+		type?: string;
+	};
+};
+
+type Section = {
+	id: string;
+	title: string;
+	args: {
+		type?: string;
+	};
+};
 
 const AddProductPage: React.FC = () => {
+	const [ fields, setFields ] = useState< Field[] >( [] );
+	const [ sections, setSections ] = useState< Section[] >( [] );
+	const getFields = async () => {
+		const data: { fields: Field[]; sections: Section[] } = await apiFetch( {
+			path: `/wc-admin/product-form/data`,
+			method: 'GET',
+		} );
+		setFields( data.fields );
+		setSections( data.sections );
+	};
 	useEffect( () => {
 		recordEvent( 'view_new_product_management_experience' );
+		getFields();
 	}, [] );
 
 	return (
@@ -37,15 +70,42 @@ const AddProductPage: React.FC = () => {
 				errors={ {} }
 				validate={ validate }
 			>
-				<ProductFormLayout>
-					<ProductDetailsSection />
-					<PricingSection />
-					<ImagesSection />
-					<ProductInventorySection />
-					<ProductShippingSection />
-					<AttributesSection />
-					<ProductFormActions />
-				</ProductFormLayout>
+				{ ( { getInputProps }: FormContext< Partial< Product > > ) => (
+					<>
+						<ProductFormLayout>
+							<ProductDetailsSection />
+							<PricingSection />
+							<ImagesSection />
+							<ProductInventorySection />
+							<ProductShippingSection />
+							<AttributesSection />
+							<ProductFormActions />
+							{ sections.map( ( section ) => (
+								<ProductSectionLayout
+									key={ section.id }
+									title={ section.title }
+									description=""
+								></ProductSectionLayout>
+							) ) }
+						</ProductFormLayout>
+						{ fields.map( ( field ) => (
+							<WooProductFieldItem
+								key={ field.id }
+								fieldName={ field.field }
+								categoryName={ field.section }
+								location="after"
+							>
+								{ field.args.type === 'text' ? (
+									<TextControl
+										label={ field.title }
+										placeholder="New field"
+										{ ...getInputProps( field.id ) }
+									/>
+								) : null }
+							</WooProductFieldItem>
+						) ) }
+					</>
+				) }
 			</Form>
 		</div>
 	);
