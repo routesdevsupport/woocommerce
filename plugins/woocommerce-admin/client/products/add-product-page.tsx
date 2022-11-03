@@ -3,8 +3,12 @@
  */
 import { recordEvent } from '@woocommerce/tracks';
 import { useEffect, useState } from '@wordpress/element';
-import { Form, FormContext } from '@woocommerce/components';
-import { TextControl } from '@wordpress/components';
+import {
+	Form,
+	FormContext,
+	WooProductFieldItem,
+} from '@woocommerce/components';
+import { Card, CardBody, TextControl } from '@wordpress/components';
 import { Product } from '@woocommerce/data';
 import apiFetch from '@wordpress/api-fetch';
 
@@ -21,10 +25,9 @@ import { ImagesSection } from './sections/images-section';
 import './product-page.scss';
 import { validate } from './product-validation';
 import { AttributesSection } from './sections/attributes-section';
-import { WooProductFieldItem } from './layout/woo-product-field-item';
 import { ProductSectionLayout } from './layout/product-section-layout';
 
-type Field = {
+export type Field = {
 	id: string;
 	title: string;
 	section: string;
@@ -34,7 +37,7 @@ type Field = {
 	};
 };
 
-type Section = {
+export type Section = {
 	id: string;
 	title: string;
 	args: {
@@ -85,7 +88,16 @@ const AddProductPage: React.FC = () => {
 									key={ section.id }
 									title={ section.title }
 									description=""
-								></ProductSectionLayout>
+								>
+									<Card>
+										<CardBody>
+											<WooProductFieldItem.Slot
+												categoryName={ section.title }
+												location="after"
+											/>
+										</CardBody>
+									</Card>
+								</ProductSectionLayout>
 							) ) }
 						</ProductFormLayout>
 						{ fields.map( ( field ) => (
