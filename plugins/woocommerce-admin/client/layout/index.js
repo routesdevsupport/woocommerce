@@ -252,6 +252,7 @@ class _Layout extends Component {
 						<PluginArea scope="woocommerce-navigation" />
 					) }
 					<PluginArea scope="woocommerce-tasks" />
+					<PluginArea scope="woocommerce-product-form" />
 				</SlotFillProvider>
 			</LayoutContext.Provider>
 		);
