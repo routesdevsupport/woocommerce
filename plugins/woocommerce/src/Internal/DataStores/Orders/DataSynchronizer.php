@@ -68,6 +68,7 @@ class DataSynchronizer implements BatchProcessorInterface {
 	 */
 	public function __construct() {
 		self::add_action( 'deleted_post', array( $this, 'handle_deleted_post' ), 10, 2 );
+		self::add_action( 'woocommerce_new_order', array( $this, 'handle_updated_order' ), 100 );
 		self::add_action( 'woocommerce_update_order', array( $this, 'handle_updated_order' ), 100 );
 		self::add_filter( 'woocommerce_feature_description_tip', array( $this, 'handle_feature_description_tip' ), 10, 3 );
 	}
@@ -257,6 +258,7 @@ SELECT(
 			case self::ID_TYPE_MISSING_IN_ORDERS_TABLE:
 				// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$sql = $wpdb->prepare(
+					
 					"
 SELECT posts.ID FROM $wpdb->posts posts
 LEFT JOIN $orders_table orders ON posts.ID = orders.id
@@ -472,7 +474,7 @@ WHERE
 			$extra_tip = sprintf(
 				_n(
 					"⚠ There's one order pending sync from the posts table to the orders table. The feature shouldn't be disabled until this order is synchronized.",
-					"⚠ There are %1\$d orders pending sync from the posts table to the orders table. The feature shouldn't be disabled until these orders are synchronized.",
+					"⚠ There are %%1\$d orders pending sync from the posts table to the orders table. The feature shouldn't be disabled until these orders are synchronized.",
 					$pending_sync_count,
 					'woocommerce'
 				),
