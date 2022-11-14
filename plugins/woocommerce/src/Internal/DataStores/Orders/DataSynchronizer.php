@@ -258,7 +258,6 @@ SELECT(
 			case self::ID_TYPE_MISSING_IN_ORDERS_TABLE:
 				// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$sql = $wpdb->prepare(
-					
 					"
 SELECT posts.ID FROM $wpdb->posts posts
 LEFT JOIN $orders_table orders ON posts.ID = orders.id
