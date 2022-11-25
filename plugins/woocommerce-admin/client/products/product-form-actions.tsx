@@ -28,6 +28,7 @@ import usePreventLeavingPage from '~/hooks/usePreventLeavingPage';
 import { WooHeaderItem } from '~/header/utils';
 import { useProductHelper } from './use-product-helper';
 import './product-form-actions.scss';
+import { useCustomerEffortScoreExitPageTracker } from '~/customer-effort-score-tracks/use-customer-effort-score-exit-page-tracker';
 
 export const ProductFormActions: React.FC = () => {
 	const {
@@ -43,6 +44,10 @@ export const ProductFormActions: React.FC = () => {
 		useFormContext< Product >();
 
 	usePreventLeavingPage( isDirty );
+	useCustomerEffortScoreExitPageTracker(
+		! values.id ? 'new-product-mvp' : 'edit-product-mvp',
+		isDirty
+	);
 
 	const { isSmallViewport } = useSelect( ( select ) => {
 		return {
