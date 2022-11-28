@@ -69,6 +69,7 @@ function CustomerEffortScoreTracks( {
 		recordEvent( 'ces_snackbar_view', {
 			action,
 			store_age: storeAgeInWeeks,
+			ces_location: 'inside',
 			...trackProps,
 		} );
 	};
@@ -86,6 +87,7 @@ function CustomerEffortScoreTracks( {
 		recordEvent( 'ces_snackbar_dismiss', {
 			action,
 			store_age: storeAgeInWeeks,
+			ces_location: 'inside',
 			...trackProps,
 		} );
 
@@ -98,6 +100,7 @@ function CustomerEffortScoreTracks( {
 		recordEvent( 'ces_view', {
 			action,
 			store_age: storeAgeInWeeks,
+			ces_location: 'inside',
 			...trackProps,
 		} );
 
@@ -110,6 +113,7 @@ function CustomerEffortScoreTracks( {
 			score,
 			comments: comments || '',
 			store_age: storeAgeInWeeks,
+			ces_location: 'inside',
 			...trackProps,
 		} );
 		createNotice( 'success', onSubmitLabel );
