@@ -37,6 +37,7 @@ import { Header } from '../header';
 import Notices from './notices';
 import TransientNotices from './transient-notices';
 import { getAdminSetting } from '~/utils/admin-settings';
+import { triggerExitPageCesSurvey } from '~/customer-effort-score-tracks/customer-effort-score-exit-page';
 import '~/activity-panel';
 import '~/mobile-banner';
 import './navigation';
@@ -133,6 +134,7 @@ class _Layout extends Component {
 
 	componentDidMount() {
 		this.recordPageViewTrack();
+		triggerExitPageCesSurvey();
 	}
 
 	componentDidUpdate( prevProps ) {
@@ -145,6 +147,9 @@ class _Layout extends Component {
 
 		if ( previousPath !== currentPath ) {
 			this.recordPageViewTrack();
+			setTimeout( () => {
+				triggerExitPageCesSurvey();
+			}, 0 );
 		}
 	}
 
