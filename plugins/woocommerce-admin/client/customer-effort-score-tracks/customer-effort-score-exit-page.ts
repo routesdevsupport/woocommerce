@@ -132,6 +132,11 @@ function getExitPageCESCopy( pageId: string ): string {
 				'We noticed you started updating a setting, then left. How was it? Your feedback will help create a better experience for thousands of merchants like you.',
 				'woocommerce'
 			);
+		case 'order_change':
+			return __(
+				'We noticed you started editing a order, then left. How was it? Your feedback will help create a better experience for thousands of merchants like you.',
+				'woocommerce'
+			);
 		default:
 			return '';
 	}
