@@ -751,7 +751,17 @@ jQuery( function ( $ ) {
 					}
 				);
 				selectedAttributes = newSelectedAttributes;
-				$( 'select.wc-attribute-search' ).data('disabled-items', newSelectedAttributes );
+				$( 'select.wc-attribute-search' ).data(
+					'disabled-items',
+					newSelectedAttributes
+				);
+				var isUsedForVariations = $( 'input#used-for-variation' ).is(
+					':checked'
+				);
+				$( 'select.wc-attribute-search' ).data(
+					'add-attribute-used-for-variations',
+					isUsedForVariations
+				);
 
 				// Reload variations panel.
 				var this_page = window.location.toString();
